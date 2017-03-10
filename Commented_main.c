@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
-#include "cross.h"
+#include "Comment_cross.h"
 
 char Hill[5]="Hill",Ground[7]="Ground",City[5]="City"; // slot type strings to be used when assigning slot types
 
@@ -18,14 +18,14 @@ int main(void){
 
 	for(size_t i=1;i<=maxPlayers;i++){ // loop to fill struct type Player_Name
 
-		printf("Please enter name for player %zd\n",i);
+		printf("Please enter name for player %u\n",i);
 		fflush(stdout);
 		scanf("%s",player[i].Player_Name); // iterates through player array and gives each player a user input name
 
 	}// end loop
 	for(size_t i=1;i<=maxPlayers;i++){ // loop to fill struct type PLayer_Type
 
-		printf("Please enter player %zd type\n",i);
+		printf("Please enter player %u type\n",i);
 		fflush(stdout);
 		scanf("%s",player[i].Player_Type); // stores Player_Type. Player Type is referenced when distributing player capabilities. NOTE: Types must must entered in the format of Elf,Wizard,Human,Ogre. Capital letter first!!
 	} // end of loop
@@ -50,7 +50,7 @@ int main(void){
 
 	int maxSlots=0; // Variable maxSlots used as index in struct array slot
 
-	do{ // do while slots are less then players.
+	do{ // do while slots are less than players.
 		printf("Please enter the number of slots (Max 20!) Max slots must be > Max Players.\n");
 		fflush(stdout);
 		scanf("\n%d",&maxSlots);
@@ -80,7 +80,7 @@ int main(void){
 	}//end loop
 	for(size_t i=1;i<=maxSlots;i++){ // loop to print each slot type
 
-		printf("slot %zd: %s\n",i,slot[i].Slot_Type);
+		printf("slot %u: %s\n",i,slot[i].Slot_Type);
 		fflush(stdout);
 	} // end loop
 
@@ -100,12 +100,12 @@ int main(void){
 		fflush(stdout);
 	} // end loop
 
-	// Code below Breaks program was trying to implement player movement.
 
-	/*for(size_t i = 1;i<maxPlayers;i++){
+	for(size_t i = 1;i<=maxPlayers;i++){ // movement loop
+             // My problem: Since one slot can only hold one player, how to make sure that after movements there is no slot holding more than 1 player?
 
 				int input;
-				printf("Current Player: player[%zd]. Where would you like to move?\n",i);
+				printf("Current Player: player[%u]. Where would you like to move?\n",i);
 				fflush(stdout);
 
 				printf("Press 0 to move up or 1 to move down\n");
@@ -142,6 +142,48 @@ int main(void){
 				printf("\nNew position is %d and slot type is %s", player[i].Current_PosNo,player[i].Current_Pos);
 				fflush(stdout);
 				printf("\n");
-		}*/
+		}
 
+    for(size_t i = 1;i<=maxPlayers;i++){  //Change player points loop
+
+                if(strcmp(player[i].Current_Pos,Hill)==0)
+                {
+                       ModStr(&player[i]); // When player move to hill, call ModStr function
+                }
+                else if (strcmp(player[i].Current_Pos,City)==0)
+                {
+                        ModMag(&player[i]); // When player move to City, call ModMag function
+                }
+    }
+
+    for(size_t i=1;i<=maxPlayers;i++)
+    {
+        for(size_t j=i; j<=maxPlayers;j++)
+        {
+            if ((player[i].Current_PosNo == player[j].Current_PosNo +1) || (player[i].Current_PosNo == player[j].Current_PosNo +1))
+            {     // If player[j] besides player[i], ask player[i] to attack or not
+                printf("Does player %u want to attack player %u (enter 0 for yes, 1 for no)?", i, j);
+                int decide;
+                scanf("%d", &decide);
+                if (decide == 0)
+                {
+                    if (player[j].Strength <= 70) // Change player points due to different situation
+                    {
+                        PlayerAttacked(&player[j]);
+                    }
+                    else if (player[j].Strength > 70)
+                    {
+                        PlayerAttacker(&player[i], player[j].Strength);
+                    }
+                }
+            }
+        }
+    }
+
+    for (size_t i=1; i<=maxPlayers; i++) //print the final result
+    {
+        printf("%s (%s, %d)\n", player[i].Player_Name, player[i].Player_Type, player[i].Life_Points);
+    }
+
+    return 0;
 }

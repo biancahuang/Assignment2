@@ -2,32 +2,9 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
-#include"cross.h"
+#include"Comment_cross.h"
 
 char str[5]="Ogre",str2[4]="Elf",str3[6]="Human",str4[7]="Wizard"; // Used in AssignType function NOTE: see line 114
-
-/*void ModStr(struct Player *player){ Two functions to modify player capabilities when moved to a certain slot type. NOTE: has not been implemented yet
-
-	if(player->Dexterity <50){
-
-		player->Strength -= 10;
-	}
-	else if(player->Dexterity >=60){
-
-		player->Strength += 10;
-	}
-}
-void ModMag(struct Player *player){
-
-	if(player->Smartness > 60){
-
-		player->Magic_Skills += 10;
-	}
-	else if(player->Smartness<=50){
-
-		player->Magic_Skills -= 10;
-	}
-}*/
 
 void OGRE(struct Player *player){ // Assigns correct stats to ogre type player
 
@@ -127,14 +104,38 @@ void AssignType(struct Player *player){ // Assigns type to player depending on t
 	}
 }
 
+void ModStr(struct Player *player){ //Two functions to modify player capabilities when moved to a certain slot type.
+
+        if(player->Dexterity <50)
+        {
+            player->Strength -= 10;
+        }
+        else if(player->Dexterity >=60)
+        {
+            player->Strength += 10;
+        }
+}
+
+void ModMag(struct Player *player){
+
+	if(player->Smartness > 60){
+
+		player->Magic_Skills += 10;
+	}
+	else if(player->Smartness<=50){
+
+		player->Dexterity -= 10;
+	}
+}
+
 /*If the Strength points of the attacked player are <=70,
 then attacked player life points = life points - 0.5 * his/her Strength points.
-If the strength points of the attacked player are > 70, the attacker life points = life points - 0.3 * (attacked player’s strength points).
-void PlayerAttack(struct Player *player){
+If the strength points of the attacked player are > 70, the attacker life points = life points - 0.3 * (attacked player’s strength points). */
+void PlayerAttacked(struct Player *player){
 
 	player->Life_Points -= 0.5 * player->Strength;
 }
-void PlayerAttacked(struct Player *player, int strength){
+void PlayerAttacker(struct Player *player, int strength){
 
 	player->Life_Points -= 0.3 * strength;
-}*/
+}

@@ -35,7 +35,9 @@ void HUMAN(struct Player *player);
 void OGRE(struct Player *player);
 void AssignType(struct Player *player);
 void ModStr(struct Player *player);
-void ModMag(struct Player *player);
+void ModMag(struct Player *player)
+void PlayerAttacked(struct Player *player);
+void PlayerAttacker(struct Player *player, int strength);
 
 
 #endif
